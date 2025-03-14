@@ -88,11 +88,11 @@ Graypot maintains logs in two locations:
 ## Screenshots
 
 ### Graylog Dashboard
-![Graylog Dashboard](Screenshots/Dashboard.PNG)
+![Graylog Dashboard](Screenshots/GraylogDashboard.PNG)
 *Example dashboard showing attack statistics, geographic distribution of attackers, and common usernames used in SSH login attempts*
 
 ### Search Results
-![Search Interface](Screenshots/Search.PNG)
+![Search Interface](Screenshots/GraylogSearch.PNG)
 *Detailed view of individual SSH login attempts with full metadata including source IPs, usernames, and client details*
 
 ## Why Graypot?
