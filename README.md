@@ -3,6 +3,7 @@
 A ready-to-deploy SSH honeypot with seamless Graylog integration. Capture and analyze SSH attacks with minimal setup effort.
 
 ![Graylog Dashboard](Screenshots/GraylogDashboard.png)
+*Thats just an example Dashboard you can build with the data from Graypot*
 
 ## Quick Start
 ```bash
