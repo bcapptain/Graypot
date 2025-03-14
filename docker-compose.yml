@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  ssh-honeypot:
+    build: .
+    ports:
+      - "${SSH_PORT:-2222}:22"
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - GRAYLOG_HOST=${GRAYLOG_HOST:-localhost}
+      - GRAYLOG_PORT=${GRAYLOG_PORT:-12201}
+    restart: unless-stopped
