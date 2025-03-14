@@ -85,6 +85,16 @@ Graypot maintains logs in two locations:
 - Periodic log review
 - Keep Docker and dependencies updated
 
+## Screenshots
+
+### Graylog Dashboard
+![Graylog Dashboard](Screenshots/Dashboard.PNG)
+*Example dashboard showing attack statistics, geographic distribution of attackers, and common usernames used in SSH login attempts*
+
+### Search Results
+![Search Interface](Screenshots/Search.PNG)
+*Detailed view of individual SSH login attempts with full metadata including source IPs, usernames, and client details*
+
 ## Why Graypot?
 
 Graypot combines the simplicity of a Docker-based honeypot with the power of Graylog's analysis capabilities. It's designed for:
