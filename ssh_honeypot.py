@@ -26,10 +26,28 @@ LOG_FILE = os.path.join(LOG_DIR, "connection_attempts.json")
 GRAYLOG_HOST = os.getenv('GRAYLOG_HOST', 'graylog')
 GRAYLOG_PORT = int(os.getenv('GRAYLOG_PORT', '12201'))
 
+# SSH port from environment variable
+SSH_PORT = int(os.getenv('SSH_PORT', '22'))
+
+# Get host node's IP address
+def get_host_ip():
+    try:
+        # This method works when running in a Docker container to get the host machine's IP
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # Connect to a public DNS server to determine the IP used for external connections
+        s.connect(("8.8.8.8", 80))
+        host_ip = s.getsockname()[0]
+        s.close()
+        return host_ip
+    except Exception as e:
+        logger.error(f"Failed to get host IP: {e}")
+        return "0.0.0.0"  # Fallback
+
+HOST_IP = get_host_ip()
+logger.info(f"Host IP detected as: {HOST_IP}")
+
 class GELFLogger:
-    def __init__(self, host: str = GRAYLOG_HOST, port: int = GRAYLOG_PORT):
-        self.host = host
-        self.port = port
+    def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.chunk_size = 8192
 
@@ -45,15 +63,8 @@ class GELFLogger:
             json_message = json.dumps(message)
             compressed_message = zlib.compress(json_message.encode('utf-8'))
             
-            # Log the attempt with more details
-            logging.info(f"Attempting to send GELF message to {self.host}:{self.port}")
-            logging.info(f"Message size: {len(compressed_message)} bytes")
-            logging.info(f"Message content: {json_message}")
-            
             # Send the message
-            self.sock.sendto(compressed_message, (self.host, self.port))
-            logging.info("GELF message sent successfully")
-            
+            self.sock.sendto(compressed_message, (GRAYLOG_HOST, GRAYLOG_PORT))
         except Exception as e:
             logging.error(f"Failed to send GELF message: {str(e)}")
             logging.error(f"Message was: {message}")
@@ -108,8 +119,8 @@ class SSH_Honeypot(paramiko.ServerInterface):
                 "_event_outcome": "failure",
                 "_source_ip": self.client_ip,
                 "_source_port": self.transport.getpeername()[1],
-                "_destination_ip": "0.0.0.0",
-                "_destination_port": 2222,
+                "_destination_ip": HOST_IP,
+                "_destination_port": SSH_PORT,
                 "_username": username,
                 "_attempted_password": password,
                 "_service": "ssh-honeypot"
@@ -168,8 +179,8 @@ def handle_client(client, addr, host_key):
         "_event_outcome": "unknown",
         "_source_ip": client_ip,
         "_source_port": addr[1],
-        "_destination_ip": "0.0.0.0",
-        "_destination_port": 2222,
+        "_destination_ip": HOST_IP,
+        "_destination_port": SSH_PORT,
         "_network_protocol": "ssh",
         "_network_transport": "tcp",
         "_service": "ssh-honeypot"
@@ -220,13 +231,14 @@ def main():
         # Generate host key
         host_key = paramiko.RSAKey.generate(2048)
         
-        # Create socket and bind to port 22
+        # Create socket and bind to port SSH_PORT
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        sock.bind(('0.0.0.0', 22))
+        sock.bind(('0.0.0.0', SSH_PORT))
         sock.listen(5)
         
-        logger.info("SSH Honeypot started on port 22")
+        logger.info(f"SSH Honeypot started on port {SSH_PORT}")
+        logger.info(f"Using host IP: {HOST_IP}")
         logger.info(f"Log file location: {LOG_FILE}")
         logger.info(f"Graylog forwarding enabled - Host: {GRAYLOG_HOST}, Port: {GRAYLOG_PORT}")
         
@@ -249,4 +261,4 @@ def main():
             sock.close()
 
 if __name__ == "__main__":
-    main() 
+    main()
