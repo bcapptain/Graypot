@@ -3,7 +3,7 @@
 A ready-to-deploy SSH honeypot with seamless Graylog integration. Capture and analyze SSH attacks with minimal setup effort.
 
 ![Graylog Dashboard](Screenshots/GraylogDashboard.png)
-*Thats just an example Dashboard you can build with the data from Graypot*
+*Thats just an example Dashboard you can build with the data from Graypot - This dashboard can be imported using the provided Content Pack - see [Graylog Content Pack](#graylog-content-pack) section.*
 
 ## Quick Start
 ```bash
@@ -92,11 +92,11 @@ Graypot maintains logs in two locations:
 
 ### Graylog Dashboard
 ![Graylog Dashboard](Screenshots/GraylogDashboard.png)
-*Example dashboard showing attack statistics, geographic distribution of attackers, and common usernames used in SSH login attempts*
+*Example dashboard showing attack statistics, geographic distribution of attackers, and common usernames used in SSH login attempts. This dashboard can be imported using the provided Content Pack - see [Graylog Content Pack](#graylog-content-pack) section.*
 
 ### Search Results
 ![Search Interface](Screenshots/GraylogSearch.png)
-*Detailed view of individual SSH login attempts with full metadata including source IPs, usernames, and client details*
+*Detailed view of individual SSH login attempts with full metadata including source IPs, usernames, and client details. Configure your field names as described in the [Graylog Content Pack](#graylog-content-pack) section for optimal visualization.*
 
 ## Why Graypot?
 
@@ -105,4 +105,22 @@ Graypot combines the simplicity of a Docker-based honeypot with the power of Gra
 - System administrators monitoring SSH attack patterns
 - Organizations wanting to understand their SSH threat landscape
 
-Perfect for both quick deployments and long-term monitoring solutions. 
+Perfect for both quick deployments and long-term monitoring solutions.
+
+## Graylog Content Pack
+
+A Graylog Content Pack is provided to help visualize the honeypot data. The pack includes:
+- Preconfigured dashboard
+- Stream configuration
+- Search queries
+
+### Field Name Requirements
+
+To use the Content Pack, your Graylog Geo IP Location field names must match:
+- `source_ip_country_code`
+- `source_ip_city_name`
+- `source_ip_geolocation`
+
+If your Graylog instance uses different field names, you'll need to either:
+- Rename your fields to match these names, or
+- Manually adjust the field names in the Dashboard widgets 

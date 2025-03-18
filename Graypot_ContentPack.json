@@ -1,0 +1,933 @@
+{
+    "v": 1,
+    "id": "5588311d-0e19-495d-8826-81b72a073e2d",
+    "rev": 1,
+    "name": "Graypot Stream and Dashboard",
+    "summary": "Visualize the Graypot data",
+    "description": "You will need to match your field names  of Geo IP Location to:\n\nsource_ip_country_code\nsource_ip_city_name\nsource_ip_geolocation\n\nor manually change these field names in the Dashboard widgets.",
+    "vendor": "https://github.com/bcapptain",
+    "url": "https://github.com/bcapptain/Graypot",
+    "parameters": [],
+    "entities": [
+      {
+        "v": "1",
+        "type": {
+          "name": "dashboard",
+          "version": "2"
+        },
+        "id": "125a51de-c971-431e-b2b3-c17b49fd21f0",
+        "data": {
+          "summary": {
+            "@type": "string",
+            "@value": ""
+          },
+          "search": {
+            "queries": [
+              {
+                "id": "8c82d2b3-2a1a-4fa7-965a-3a8b3efd59d7",
+                "timerange": {
+                  "from": 86400,
+                  "type": "relative"
+                },
+                "filter": {
+                  "type": "or",
+                  "filters": [
+                    {
+                      "type": "stream",
+                      "id": "050cc099-e0a7-457f-a11c-724b50702998"
+                    }
+                  ]
+                },
+                "filters": [],
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "search_types": [
+                  {
+                    "query": {
+                      "type": "elasticsearch",
+                      "query_string": ""
+                    },
+                    "name": "trend",
+                    "timerange": {
+                      "source": "search_type",
+                      "id": "01c9d9df-91ee-460a-8f2d-b0fc0dc4b39e",
+                      "offset": "1i",
+                      "type": "offset"
+                    },
+                    "column_limit": null,
+                    "streams": [
+                      "050cc099-e0a7-457f-a11c-724b50702998"
+                    ],
+                    "row_limit": null,
+                    "series": [
+                      {
+                        "type": "count",
+                        "id": "Message Count",
+                        "field": "gl2_receive_timestamp"
+                      }
+                    ],
+                    "filter": null,
+                    "rollup": true,
+                    "row_groups": [],
+                    "type": "pivot",
+                    "stream_categories": [],
+                    "id": "1f1d2ab0-a5e1-46e4-b3df-ba443d642bdf",
+                    "filters": [],
+                    "column_groups": [],
+                    "sort": []
+                  },
+                  {
+                    "query": {
+                      "type": "elasticsearch",
+                      "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                    },
+                    "name": "chart",
+                    "timerange": {
+                      "from": 86400,
+                      "type": "relative"
+                    },
+                    "column_limit": null,
+                    "streams": [
+                      "050cc099-e0a7-457f-a11c-724b50702998"
+                    ],
+                    "row_limit": null,
+                    "series": [
+                      {
+                        "type": "count",
+                        "id": "count(source_ip)",
+                        "field": "source_ip"
+                      }
+                    ],
+                    "filter": null,
+                    "rollup": true,
+                    "row_groups": [
+                      {
+                        "type": "values",
+                        "fields": [
+                          "source_ip",
+                          "source_ip_country_code",
+                          "source_ip_city_name",
+                          "source_ip_geolocation"
+                        ],
+                        "limit": 500,
+                        "skip_empty_values": false
+                      }
+                    ],
+                    "type": "pivot",
+                    "stream_categories": [],
+                    "id": "a6a120c1-9139-4523-9940-c1fe95bc0023",
+                    "filters": [],
+                    "column_groups": [],
+                    "sort": []
+                  },
+                  {
+                    "query": {
+                      "type": "elasticsearch",
+                      "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                    },
+                    "name": "chart",
+                    "timerange": {
+                      "from": 86400,
+                      "type": "relative"
+                    },
+                    "column_limit": null,
+                    "streams": [
+                      "050cc099-e0a7-457f-a11c-724b50702998"
+                    ],
+                    "row_limit": null,
+                    "series": [
+                      {
+                        "type": "count",
+                        "id": "Attempts",
+                        "field": "username"
+                      }
+                    ],
+                    "filter": null,
+                    "rollup": true,
+                    "row_groups": [
+                      {
+                        "type": "values",
+                        "fields": [
+                          "attempted_password"
+                        ],
+                        "limit": 15,
+                        "skip_empty_values": false
+                      }
+                    ],
+                    "type": "pivot",
+                    "stream_categories": [],
+                    "id": "1ad46b4a-caed-49a9-8cf1-0079bfb7c65f",
+                    "filters": [],
+                    "column_groups": [],
+                    "sort": [
+                      {
+                        "type": "series",
+                        "field": "count(username)",
+                        "direction": "Descending"
+                      }
+                    ]
+                  },
+                  {
+                    "query": {
+                      "type": "elasticsearch",
+                      "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                    },
+                    "name": null,
+                    "timerange": {
+                      "from": 86400,
+                      "type": "relative"
+                    },
+                    "offset": 0,
+                    "streams": [
+                      "050cc099-e0a7-457f-a11c-724b50702998"
+                    ],
+                    "filter": null,
+                    "decorators": [],
+                    "type": "messages",
+                    "stream_categories": [],
+                    "id": "d3ba0e83-809a-46c5-8838-147563aeeec3",
+                    "limit": 150,
+                    "filters": []
+                  },
+                  {
+                    "query": {
+                      "type": "elasticsearch",
+                      "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                    },
+                    "name": "chart",
+                    "timerange": {
+                      "from": 86400,
+                      "type": "relative"
+                    },
+                    "column_limit": null,
+                    "streams": [
+                      "050cc099-e0a7-457f-a11c-724b50702998"
+                    ],
+                    "row_limit": null,
+                    "series": [
+                      {
+                        "type": "count",
+                        "id": "Attempts",
+                        "field": "username"
+                      }
+                    ],
+                    "filter": null,
+                    "rollup": true,
+                    "row_groups": [
+                      {
+                        "type": "values",
+                        "fields": [
+                          "username"
+                        ],
+                        "limit": 15,
+                        "skip_empty_values": false
+                      }
+                    ],
+                    "type": "pivot",
+                    "stream_categories": [],
+                    "id": "0f61db48-b2a0-494e-97d3-773eaf1484df",
+                    "filters": [],
+                    "column_groups": [],
+                    "sort": []
+                  },
+                  {
+                    "query": {
+                      "type": "elasticsearch",
+                      "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                    },
+                    "name": "chart",
+                    "timerange": {
+                      "from": 86400,
+                      "type": "relative"
+                    },
+                    "column_limit": null,
+                    "streams": [
+                      "050cc099-e0a7-457f-a11c-724b50702998"
+                    ],
+                    "row_limit": null,
+                    "series": [
+                      {
+                        "type": "count",
+                        "id": "Attempts",
+                        "field": null
+                      }
+                    ],
+                    "filter": null,
+                    "rollup": true,
+                    "row_groups": [
+                      {
+                        "type": "values",
+                        "fields": [
+                          "attempted_password"
+                        ],
+                        "limit": 15,
+                        "skip_empty_values": false
+                      }
+                    ],
+                    "type": "pivot",
+                    "stream_categories": [],
+                    "id": "a878e935-b3e0-408a-b07f-398400d1b0de",
+                    "filters": [],
+                    "column_groups": [],
+                    "sort": []
+                  },
+                  {
+                    "query": {
+                      "type": "elasticsearch",
+                      "query_string": ""
+                    },
+                    "name": "chart",
+                    "timerange": {
+                      "from": 86400,
+                      "type": "relative"
+                    },
+                    "column_limit": null,
+                    "streams": [
+                      "050cc099-e0a7-457f-a11c-724b50702998"
+                    ],
+                    "row_limit": null,
+                    "series": [
+                      {
+                        "type": "count",
+                        "id": "Message Count",
+                        "field": "gl2_receive_timestamp"
+                      }
+                    ],
+                    "filter": null,
+                    "rollup": true,
+                    "row_groups": [],
+                    "type": "pivot",
+                    "stream_categories": [],
+                    "id": "01c9d9df-91ee-460a-8f2d-b0fc0dc4b39e",
+                    "filters": [],
+                    "column_groups": [],
+                    "sort": []
+                  },
+                  {
+                    "query": {
+                      "type": "elasticsearch",
+                      "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                    },
+                    "name": "chart",
+                    "timerange": {
+                      "from": 432000,
+                      "type": "relative"
+                    },
+                    "column_limit": null,
+                    "streams": [
+                      "050cc099-e0a7-457f-a11c-724b50702998"
+                    ],
+                    "row_limit": null,
+                    "series": [
+                      {
+                        "type": "count",
+                        "id": "Auth Attempts",
+                        "field": null
+                      }
+                    ],
+                    "filter": null,
+                    "rollup": true,
+                    "row_groups": [
+                      {
+                        "type": "time",
+                        "fields": [
+                          "gl2_receive_timestamp"
+                        ],
+                        "interval": {
+                          "type": "timeunit",
+                          "timeunit": "10m"
+                        }
+                      }
+                    ],
+                    "type": "pivot",
+                    "stream_categories": [],
+                    "id": "2fd9d17a-97c2-419c-a822-b8975d0f225d",
+                    "filters": [],
+                    "column_groups": [],
+                    "sort": []
+                  }
+                ]
+              }
+            ],
+            "parameters": [],
+            "requires": {},
+            "owner": "admin",
+            "created_at": "2025-03-18T20:44:31.282Z"
+          },
+          "created_at": "2025-03-14T21:10:13.673Z",
+          "requires": {},
+          "state": {
+            "8c82d2b3-2a1a-4fa7-965a-3a8b3efd59d7": {
+              "selected_fields": null,
+              "static_message_list_id": null,
+              "titles": {
+                "widget": {
+                  "5ce8eedd-fe1a-4702-8146-eef4c7e8c962": "All Messages (copy) (copy)",
+                  "25aa2948-ceca-469b-a955-4db60d47552b": "Field Statistics for timestamp",
+                  "ee81175d-edd6-414d-9987-fabe68c770b6": "All Messages (copy)",
+                  "21e94c1f-7468-40a1-a7f1-c2560a268805": "Field Statistics for source_ip_geolocation",
+                  "95b1598a-0757-41d9-b8f0-f98fbc7a9803": "All Messages",
+                  "d8f17bb4-0def-49a6-8f19-4cac239ba381": "Field Statistics for username",
+                  "2ccb8081-3e7c-422a-acc8-86fa5248ba14": "TOP 15 Usernames (copy)",
+                  "6cbd84f2-d720-42f0-956d-c8395b82c597": "TOP 15 Usernames (copy) (copy)",
+                  "99efc292-ef77-44a2-ad54-46ab2889a7ff": "TOP 15 Passwords",
+                  "9d3ca36c-ca53-4204-adfd-c119288de09b": "TOP 15 Passwords",
+                  "5a6dff54-3ee3-4f72-a63d-2372ce14eb45": "TOP 15 Passwords"
+                }
+              },
+              "widgets": [
+                {
+                  "config": {
+                    "fields": [
+                      "timestamp",
+                      "event_type",
+                      "source_ip",
+                      "source_ip_country_code",
+                      "source_ip_city_name",
+                      "username",
+                      "attempted_password",
+                      "source_ip_geolocation"
+                    ],
+                    "units": {},
+                    "show_message_row": true,
+                    "show_summary": true,
+                    "decorators": [],
+                    "sort": [
+                      {
+                        "type": "pivot",
+                        "field": "timestamp",
+                        "direction": "Descending"
+                      }
+                    ]
+                  },
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                  },
+                  "timerange": {
+                    "from": 86400,
+                    "type": "relative"
+                  },
+                  "streams": [
+                    "050cc099-e0a7-457f-a11c-724b50702998"
+                  ],
+                  "filter": null,
+                  "type": "messages",
+                  "stream_categories": [],
+                  "id": "95b1598a-0757-41d9-b8f0-f98fbc7a9803",
+                  "filters": []
+                },
+                {
+                  "config": {
+                    "visualization": "table",
+                    "units": {},
+                    "column_limit": null,
+                    "event_annotation": false,
+                    "row_limit": 15,
+                    "row_pivots": [
+                      {
+                        "fields": [
+                          "attempted_password"
+                        ],
+                        "type": "values",
+                        "config": {
+                          "limit": 15
+                        }
+                      }
+                    ],
+                    "series": [
+                      {
+                        "config": {
+                          "name": "Attempts"
+                        },
+                        "function": "count()"
+                      }
+                    ],
+                    "rollup": true,
+                    "column_pivots": [],
+                    "visualization_config": {
+                      "pinned_columns": []
+                    },
+                    "formatting_settings": null,
+                    "sort": []
+                  },
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                  },
+                  "timerange": {
+                    "from": 86400,
+                    "type": "relative"
+                  },
+                  "streams": [
+                    "050cc099-e0a7-457f-a11c-724b50702998"
+                  ],
+                  "filter": null,
+                  "type": "aggregation",
+                  "stream_categories": [],
+                  "id": "99efc292-ef77-44a2-ad54-46ab2889a7ff",
+                  "filters": []
+                },
+                {
+                  "config": {
+                    "visualization": "table",
+                    "units": {},
+                    "column_limit": null,
+                    "event_annotation": false,
+                    "row_limit": 15,
+                    "row_pivots": [
+                      {
+                        "fields": [
+                          "username"
+                        ],
+                        "type": "values",
+                        "config": {
+                          "limit": 15
+                        }
+                      }
+                    ],
+                    "series": [
+                      {
+                        "config": {
+                          "name": "Attempts"
+                        },
+                        "function": "count(username)"
+                      }
+                    ],
+                    "rollup": true,
+                    "column_pivots": [],
+                    "visualization_config": {
+                      "pinned_columns": []
+                    },
+                    "formatting_settings": null,
+                    "sort": []
+                  },
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                  },
+                  "timerange": {
+                    "from": 86400,
+                    "type": "relative"
+                  },
+                  "streams": [
+                    "050cc099-e0a7-457f-a11c-724b50702998"
+                  ],
+                  "filter": null,
+                  "type": "aggregation",
+                  "stream_categories": [],
+                  "id": "2ccb8081-3e7c-422a-acc8-86fa5248ba14",
+                  "filters": []
+                },
+                {
+                  "config": {
+                    "visualization": "map",
+                    "units": {},
+                    "column_limit": null,
+                    "event_annotation": false,
+                    "row_limit": 500,
+                    "row_pivots": [
+                      {
+                        "fields": [
+                          "source_ip",
+                          "source_ip_country_code",
+                          "source_ip_city_name",
+                          "source_ip_geolocation"
+                        ],
+                        "type": "values",
+                        "config": {
+                          "limit": 500,
+                          "skip_empty_values": false
+                        }
+                      }
+                    ],
+                    "series": [
+                      {
+                        "config": {
+                          "name": null
+                        },
+                        "function": "count(source_ip)"
+                      }
+                    ],
+                    "rollup": false,
+                    "column_pivots": [],
+                    "visualization_config": {
+                      "viewport": {
+                        "zoom": 1,
+                        "center_x": 0,
+                        "center_y": 0
+                      }
+                    },
+                    "formatting_settings": null,
+                    "sort": []
+                  },
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                  },
+                  "timerange": {
+                    "from": 86400,
+                    "type": "relative"
+                  },
+                  "streams": [
+                    "050cc099-e0a7-457f-a11c-724b50702998"
+                  ],
+                  "filter": null,
+                  "type": "aggregation",
+                  "stream_categories": [],
+                  "id": "21e94c1f-7468-40a1-a7f1-c2560a268805",
+                  "filters": []
+                },
+                {
+                  "config": {
+                    "visualization": "pie",
+                    "units": {},
+                    "column_limit": null,
+                    "event_annotation": false,
+                    "row_limit": 15,
+                    "row_pivots": [
+                      {
+                        "fields": [
+                          "attempted_password"
+                        ],
+                        "type": "values",
+                        "config": {
+                          "limit": 15
+                        }
+                      }
+                    ],
+                    "series": [
+                      {
+                        "config": {
+                          "name": "Attempts"
+                        },
+                        "function": "count(username)"
+                      }
+                    ],
+                    "rollup": true,
+                    "column_pivots": [],
+                    "visualization_config": null,
+                    "formatting_settings": null,
+                    "sort": [
+                      {
+                        "type": "series",
+                        "field": "count(username)",
+                        "direction": "Descending"
+                      }
+                    ]
+                  },
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                  },
+                  "timerange": {
+                    "from": 86400,
+                    "type": "relative"
+                  },
+                  "streams": [
+                    "050cc099-e0a7-457f-a11c-724b50702998"
+                  ],
+                  "filter": null,
+                  "type": "aggregation",
+                  "stream_categories": [],
+                  "id": "9d3ca36c-ca53-4204-adfd-c119288de09b",
+                  "filters": []
+                },
+                {
+                  "config": {
+                    "visualization": "numeric",
+                    "units": {},
+                    "column_limit": null,
+                    "event_annotation": false,
+                    "row_limit": null,
+                    "row_pivots": [],
+                    "series": [
+                      {
+                        "config": {
+                          "name": "Message Count"
+                        },
+                        "function": "count(gl2_receive_timestamp)"
+                      }
+                    ],
+                    "rollup": false,
+                    "column_pivots": [],
+                    "visualization_config": {
+                      "trend": true,
+                      "trend_preference": "LOWER"
+                    },
+                    "formatting_settings": null,
+                    "sort": []
+                  },
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "timerange": {
+                    "from": 86400,
+                    "type": "relative"
+                  },
+                  "streams": [
+                    "050cc099-e0a7-457f-a11c-724b50702998"
+                  ],
+                  "filter": null,
+                  "type": "aggregation",
+                  "stream_categories": [],
+                  "id": "c3ef4390-f96e-46f7-9783-0a528a8e1e4b",
+                  "filters": []
+                },
+                {
+                  "config": {
+                    "visualization": "bar",
+                    "units": {},
+                    "column_limit": null,
+                    "event_annotation": false,
+                    "row_limit": null,
+                    "row_pivots": [
+                      {
+                        "fields": [
+                          "gl2_receive_timestamp"
+                        ],
+                        "type": "time",
+                        "config": {
+                          "interval": {
+                            "type": "timeunit",
+                            "value": 10,
+                            "unit": "minutes"
+                          }
+                        }
+                      }
+                    ],
+                    "series": [
+                      {
+                        "config": {
+                          "name": "Auth Attempts"
+                        },
+                        "function": "count()"
+                      }
+                    ],
+                    "rollup": false,
+                    "column_pivots": [],
+                    "visualization_config": {
+                      "barmode": "group",
+                      "axis_type": "linear"
+                    },
+                    "formatting_settings": {
+                      "chart_colors": [
+                        {
+                          "field_name": "count()",
+                          "chart_color": "#6044a8"
+                        },
+                        {
+                          "field_name": "Auth Attempts",
+                          "chart_color": "#7240a3"
+                        }
+                      ]
+                    },
+                    "sort": []
+                  },
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "gl2_source_input:67d379c3135c6d07ab155dd6 AND event_type:auth_attempt"
+                  },
+                  "timerange": {
+                    "from": 432000,
+                    "type": "relative"
+                  },
+                  "streams": [
+                    "050cc099-e0a7-457f-a11c-724b50702998"
+                  ],
+                  "filter": null,
+                  "type": "aggregation",
+                  "stream_categories": [],
+                  "id": "25aa2948-ceca-469b-a955-4db60d47552b",
+                  "filters": []
+                }
+              ],
+              "widget_mapping": {
+                "21e94c1f-7468-40a1-a7f1-c2560a268805": [
+                  "a6a120c1-9139-4523-9940-c1fe95bc0023"
+                ],
+                "25aa2948-ceca-469b-a955-4db60d47552b": [
+                  "2fd9d17a-97c2-419c-a822-b8975d0f225d"
+                ],
+                "2ccb8081-3e7c-422a-acc8-86fa5248ba14": [
+                  "0f61db48-b2a0-494e-97d3-773eaf1484df"
+                ],
+                "95b1598a-0757-41d9-b8f0-f98fbc7a9803": [
+                  "d3ba0e83-809a-46c5-8838-147563aeeec3"
+                ],
+                "99efc292-ef77-44a2-ad54-46ab2889a7ff": [
+                  "a878e935-b3e0-408a-b07f-398400d1b0de"
+                ],
+                "9d3ca36c-ca53-4204-adfd-c119288de09b": [
+                  "1ad46b4a-caed-49a9-8cf1-0079bfb7c65f"
+                ],
+                "c3ef4390-f96e-46f7-9783-0a528a8e1e4b": [
+                  "1f1d2ab0-a5e1-46e4-b3df-ba443d642bdf",
+                  "01c9d9df-91ee-460a-8f2d-b0fc0dc4b39e"
+                ]
+              },
+              "positions": {
+                "95b1598a-0757-41d9-b8f0-f98fbc7a9803": {
+                  "col": 1,
+                  "row": 9,
+                  "height": 6,
+                  "width": "Infinity"
+                },
+                "9d3ca36c-ca53-4204-adfd-c119288de09b": {
+                  "col": 1,
+                  "row": 4,
+                  "height": 3,
+                  "width": 6
+                },
+                "2ccb8081-3e7c-422a-acc8-86fa5248ba14": {
+                  "col": 3,
+                  "row": 1,
+                  "height": 3,
+                  "width": 2
+                },
+                "99efc292-ef77-44a2-ad54-46ab2889a7ff": {
+                  "col": 5,
+                  "row": 1,
+                  "height": 3,
+                  "width": 2
+                },
+                "21e94c1f-7468-40a1-a7f1-c2560a268805": {
+                  "col": 7,
+                  "row": 1,
+                  "height": 6,
+                  "width": 6
+                },
+                "25aa2948-ceca-469b-a955-4db60d47552b": {
+                  "col": 1,
+                  "row": 7,
+                  "height": 2,
+                  "width": "Infinity"
+                },
+                "c3ef4390-f96e-46f7-9783-0a528a8e1e4b": {
+                  "col": 1,
+                  "row": 1,
+                  "height": 3,
+                  "width": 2
+                }
+              },
+              "formatting": {
+                "highlighting": []
+              },
+              "display_mode_settings": {
+                "positions": {}
+              }
+            }
+          },
+          "properties": [],
+          "owner": "admin",
+          "title": {
+            "@type": "string",
+            "@value": "Honeypot"
+          },
+          "type": "DASHBOARD",
+          "description": {
+            "@type": "string",
+            "@value": ""
+          }
+        },
+        "constraints": [
+          {
+            "type": "server-version",
+            "version": ">=6.1.4+7528370"
+          }
+        ]
+      },
+      {
+        "v": "1",
+        "type": {
+          "name": "stream",
+          "version": "1"
+        },
+        "id": "050cc099-e0a7-457f-a11c-724b50702998",
+        "data": {
+          "alarm_callbacks": [],
+          "outputs": [],
+          "remove_matches": {
+            "@type": "boolean",
+            "@value": false
+          },
+          "title": {
+            "@type": "string",
+            "@value": "Honeypot"
+          },
+          "stream_rules": [
+            {
+              "type": {
+                "@type": "string",
+                "@value": "EXACT"
+              },
+              "field": {
+                "@type": "string",
+                "@value": "service"
+              },
+              "value": {
+                "@type": "string",
+                "@value": "ssh-honeypot"
+              },
+              "inverted": {
+                "@type": "boolean",
+                "@value": false
+              },
+              "description": {
+                "@type": "string",
+                "@value": ""
+              }
+            },
+            {
+              "type": {
+                "@type": "string",
+                "@value": "EXACT"
+              },
+              "field": {
+                "@type": "string",
+                "@value": "event_type"
+              },
+              "value": {
+                "@type": "string",
+                "@value": "auth_attempt"
+              },
+              "inverted": {
+                "@type": "boolean",
+                "@value": false
+              },
+              "description": {
+                "@type": "string",
+                "@value": ""
+              }
+            }
+          ],
+          "alert_conditions": [],
+          "matching_type": {
+            "@type": "string",
+            "@value": "AND"
+          },
+          "disabled": {
+            "@type": "boolean",
+            "@value": false
+          },
+          "description": {
+            "@type": "string",
+            "@value": ""
+          },
+          "default_stream": {
+            "@type": "boolean",
+            "@value": false
+          }
+        },
+        "constraints": [
+          {
+            "type": "server-version",
+            "version": ">=6.1.4+7528370"
+          }
+        ]
+      }
+    ]
+  }
