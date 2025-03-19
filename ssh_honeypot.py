@@ -10,6 +10,7 @@ import time
 import zlib
 from typing import Dict, Any, Optional
 from paramiko.ssh_exception import SSHException
+import urllib.request
 
 # Configure logging
 logging.basicConfig(
@@ -29,21 +30,36 @@ GRAYLOG_PORT = int(os.getenv('GRAYLOG_PORT', '12201'))
 # SSH port from environment variable
 SSH_PORT = int(os.getenv('SSH_PORT', '22'))
 
-# Get host node's IP address
-def get_host_ip():
+def get_public_ip():
+    """
+    Get public IP by first checking environment variable, then trying online services.
+    Returns the public IP or '0.0.0.0' if all methods fail.
+    """
+    # First check environment variable
+    public_ip = os.getenv('PUBLIC_IP')
+    if public_ip:
+        logging.info("Using PUBLIC_IP from environment variable")
+        return public_ip
+        
+    # Try ipinfo.io
     try:
-        # This method works when running in a Docker container to get the host machine's IP
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # Connect to a public DNS server to determine the IP used for external connections
-        s.connect(("8.8.8.8", 80))
-        host_ip = s.getsockname()[0]
-        s.close()
-        return host_ip
-    except Exception as e:
-        logger.error(f"Failed to get host IP: {e}")
-        return "0.0.0.0"  # Fallback
+        with urllib.request.urlopen('https://ipinfo.io/ip', timeout=3) as response:
+            return response.read().decode('utf-8').strip()
+    except (urllib.error.URLError, urllib.error.HTTPError, socket.timeout) as e:
+        logging.warning(f"Could not fetch public IP from ipinfo.io: {e}")
+        
+        # Try alternative service api.ipify.org
+        try:
+            with urllib.request.urlopen('https://api.ipify.org', timeout=3) as response:
+                return response.read().decode('utf-8').strip()
+        except (urllib.error.URLError, urllib.error.HTTPError, socket.timeout) as e:
+            logging.warning(f"Could not fetch public IP from ipify.org: {e}")
+            
+            # Last resort fallback
+            logging.warning("Could not determine public IP, falling back to 0.0.0.0")
+            return '0.0.0.0'
 
-HOST_IP = get_host_ip()
+HOST_IP = get_public_ip()
 logger.info(f"Host IP detected as: {HOST_IP}")
 
 class GELFLogger:
