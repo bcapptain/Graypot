@@ -41,7 +41,7 @@ cd graypot
 
 2. Copy the example environment file:
 ```bash
-cp example.env .env
+cp example.env.dist .env
 ```
 
 3. Edit the `.env` file with your configuration:

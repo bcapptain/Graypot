@@ -5,7 +5,11 @@ connection_attempts.json
 
 # Environment files
 .env
-*.env
+.env.local
+.env.*.local
+
+# But allow example env file
+!example.env.dist
 
 # Python
 __pycache__/
